@@ -1,25 +1,8 @@
 <template>
-    <div class="menu-box" :style="{padding:'10px 15px',background:'#7b7b7b',textAlign:'right'}">
-        <el-drawer
-        title="菜单"
-        size="80%"
-        :visible.sync="drawer"
-        direction="ltr"
-        >
-            <div class="menu-content">
-                <ul style="list-style: none;">
-                    <li v-for="item in menuList" :key="item.id">                       
-                        <span @click="closeMenu">
-                            <router-link :to="item.link"> {{item.name}}</router-link>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-        </el-drawer>
-        <el-button @click="drawer = true" type="" style="">
-            菜单
-        </el-button>
+    <div class="menu-box" :style="{textAlign:'right'}">
+        <van-dropdown-menu :style="{background:'#dbdbdb'}" active-color="#0ca055">
+            <van-dropdown-item @change="menuChange" v-model="activeMenu" :options="this.menuList" />
+        </van-dropdown-menu>
     </div>
     
 </template>
@@ -28,23 +11,50 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { ArrayPropsDefinition } from 'vue/types/options';
 
+interface creatObj {
+    value?: string,
+    text?: string,
+    link?: string
+}
+
+
 @Component
 export default class Menu extends Vue {
     private drawer: Boolean;
-    private menuList: Array<Object>;
+    private activeMenu: string;
+    private menuList: object[];
+
+    
     constructor() {
         super();
         this.drawer = false;
-        this.menuList = [
-            {id:'001',name:'Home',link:'/'},
-            {id:'002',name:'About',link:'/about'},
-            {id:'003',name:'菜单3',link:'/home'},
-            {id:'004',name:'菜单4',link:'/home'}
-        ]
+        this.activeMenu = '001';
+
+        let obj: creatObj = Object.create(null);
+        obj.value = "001";
+        obj.text = "首页";
+        obj.link = "/";
+        let obj2: creatObj = Object.create(null);
+        obj2.value = "002";
+        obj2.text = "关于";
+        obj2.link = "/about";
+        this.menuList = [obj,obj2];
+        
+
     }
 
-    closeMenu(){
-        this.drawer = !this.drawer
+    private closeMenu(): void {
+        this.drawer = !this.drawer;
+    }
+
+    private menuChange(value:string): void{
+        let link:string = ''
+        this.menuList.forEach((element:any) => {
+            if(element.value === value){
+                link = element.link
+            }
+        });
+        this.$router.push(link)
     }
 }
 </script>

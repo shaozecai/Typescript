@@ -1,8 +1,35 @@
 <template>
-    <div class="menu-box" :style="{textAlign:'right'}">
-        <van-dropdown-menu :style="{background:'#dbdbdb'}" active-color="#0ca055">
-            <van-dropdown-item @change="menuChange" v-model="activeMenu" :options="this.menuList" />
-        </van-dropdown-menu>
+    <div class="menu-box" :style="{textAlign:'right',background:'#767676',padding:'10px'}">
+        <van-button type="primary" @click="show = !show">
+            {{userName}}
+        </van-button>
+        <van-dialog 
+            v-model="show" 
+            title="会员登录" 
+            show-cancel-button
+            confirm-button-text="登录"
+            :beforeClose="loginConfirm"
+            :style="{textAlign:'left'}"
+        >
+            <van-cell-group>
+                <van-field
+                    v-model="user.name"
+                    required
+                    clearable
+                    label="用户名"
+                    label-width="60px"
+                    placeholder="请输入用户名"
+                />
+                <van-field
+                    v-model="password"
+                    type="password"
+                    label="密码"
+                    label-width="60px"
+                    placeholder="请输入密码"
+                    required
+                />
+                </van-cell-group>
+        </van-dialog>
     </div>
     
 </template>
@@ -10,52 +37,46 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { ArrayPropsDefinition } from 'vue/types/options';
+import interfaces from '../public/javascript/api'
+import { Toast } from 'vant';
 
 interface creatObj {
     value?: string,
     text?: string,
-    link?: string
+    link?: string,
+    name?: string,
+    id?: string
 }
 
 
 @Component
 export default class Menu extends Vue {
-    private drawer: Boolean;
-    private activeMenu: string;
-    private menuList: object[];
-
-    
+    private userName:string;
+    private show:Boolean;
+    private password: string;
+    private user:creatObj;
     constructor() {
         super();
-        this.drawer = false;
-        this.activeMenu = '001';
-
-        let obj: creatObj = Object.create(null);
-        obj.value = "001";
-        obj.text = "首页";
-        obj.link = "/";
-        let obj2: creatObj = Object.create(null);
-        obj2.value = "002";
-        obj2.text = "关于";
-        obj2.link = "/about";
-        this.menuList = [obj,obj2];
-        
+        this.userName = '登录'
+        this.show = false;
+        this.password = ''
+        this.user = Object.create(null);
+        this.user.name = ''
 
     }
 
-    private closeMenu(): void {
-        this.drawer = !this.drawer;
-    }
-
-    private menuChange(value:string): void{
-        let link:string = ''
-        this.menuList.forEach((element:any) => {
-            if(element.value === value){
-                link = element.link
-            }
-        });
-        this.$router.push(link)
-    }
+   private loginConfirm(action:any,done:any): void{
+       const that = this
+       if(action && action === 'cancel'){
+           done() 
+       }else{
+           interfaces.getUserInfo({id:'00001'},function(json:any){
+                Toast.success('登录成功!');
+                that.userName = json.data.name.cname           
+                done()
+            })           
+       }
+   }
 }
 </script>
 

@@ -1,10 +1,10 @@
 <template>
  <div>
-    
-    <van-button type="primary" @click="getData">主要按钮</van-button>
+    homepage
+    <!-- <van-button type="primary" @click="getData">主要按钮</van-button>
     <van-button type="info">信息按钮</van-button>
     <van-button type="warning">警告按钮</van-button>
-    <van-button type="danger">危险按钮</van-button>
+    <van-button type="danger">危险按钮</van-button> -->
 
  </div>
 </template>

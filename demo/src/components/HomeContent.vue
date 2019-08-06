@@ -9,13 +9,13 @@
               <van-skeleton title avatar :row="3" :loading="item.loading" animate>
                 <van-row>
                   <van-col span="24">
-                    <img :src="item.image" alt="" width="100%">
+                    <img @click="gotoDetail(item.id)" :src="item.image" alt="" width="100%">
                   </van-col>
                   <van-col span="4">
                     标题：
                   </van-col>
                   <van-col span="20">
-                    <h3 :style="{fontSize:'14px',margin:'0'}">{{item.title}}</h3>
+                    <h3 @click="gotoDetail(item.id)" :style="{fontSize:'14px',margin:'0'}">{{item.title}}</h3>
                   </van-col>
                   <van-col span="6">
                     推荐指数:
@@ -197,6 +197,11 @@ export default class HomeContent extends Vue {
       interfaces.getUserInfo({id:'00001'},function(json:object){
         console.log(json,'json')
       })
+    }
+
+    //跳转详情页
+    public gotoDetail(id:string): void{
+      this.$router.push({name: 'detail', params: {id: id}})
     }
 
     //生命周期钩子

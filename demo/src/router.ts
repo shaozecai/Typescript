@@ -21,5 +21,10 @@ export default new Router({
       name: 'login',
       component: () => import('./views/Login.vue'),
     },
+    {
+      path: '/detail/:id',
+      name: 'detail',
+      component: () => import('./views/Detail.vue'),
+    },
   ],
 });

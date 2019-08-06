@@ -8,7 +8,8 @@ let httpError = function(err:object) {
  */
 interface createApi{
     getUserInfo?:any,
-    getList?:any
+    getList?:any,
+    getDetail?:any
 }
 let interfaces:createApi = Object.create(null);
 
@@ -40,5 +41,21 @@ interfaces.getList = function(payload:object,callback:any){
         httpError(e)
     })
 }
+//查询详情接口
+interfaces.getDetail = function(payload:object,callback:any){
+    let params:object = {
+        ...{},
+        ...payload
+    }
+    dnwe.post('/getDetail',params).then((res:object):object => {
+        return res
+    }).then((json:object):any =>{
+        callback(json)
+    }).catch((e:object):void => {
+        httpError(e)
+    })
+}
+
+
 
 export default interfaces

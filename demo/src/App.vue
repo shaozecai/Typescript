@@ -4,6 +4,9 @@
       <Menu></Menu>      
     </div>
     <router-view/>
+    <div id="footer">
+      <FooterBar></FooterBar> 
+    </div>
   </div>
 </template>
 
@@ -11,10 +14,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Menu from '@/components/Menu.vue'; // @ is an alias to /src
-
+import FooterBar from '@/components/FooterBar.vue'; // @ is an alias to /src
 @Component({
   components: {
-    Menu,
+    Menu,FooterBar
   },
 })
 

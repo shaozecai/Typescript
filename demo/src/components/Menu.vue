@@ -6,8 +6,13 @@
                     菜单
                 </van-button>
             </van-col>
-            <van-col span="6" offset="12" :style="{textAlign:'right',fontSize:'14px',lineHeight:'30px',color:'#fff'}">
-                <span @click="loginShowFun">{{loginText}}</span>
+            <van-col span="6" offset="12" :style="{textAlign:'right',fontSize:'14px',lineHeight:'30px',color:'#fff',display:'flex',justifyContent:'flex-end'}">
+                <span @click="loginShowFun" v-if="$store.state.userInfo.cname" :style="{width:'30px',height:'30px',borderRadius:'50%',background:'#fff',overflow:'hidden',border:'2px solid #fff',boxSize:'border-box'}">
+                    <img src="../assets/person_head_icon.png" alt="" width="100%">
+                </span>
+                <span @click="loginShowFun" v-if="!$store.state.userInfo.cname">
+                    登陆
+                </span>
             </van-col>
         </van-row>
         
@@ -43,11 +48,14 @@
         <!-- menu -->
         <van-popup v-model="menuShow" position="left" :style="{ width: '80%',height:'100%',maxWidth:'400px' }">
             <van-row>
-                <van-col span="8" offset="8" :style="{padding:'30px 0 10px'}">
+                <van-col span="8" offset="8" :style="{marginTop:'30px',marginBottom:'10px',borderRadius:'50%',background:'#d3d3d3',overflow:'hidden',padding:'5px'}">
                     <img src="../assets/logo.png" alt="" width="100%">
                 </van-col>
                 <van-col v-for="item in menuList" :key="item.value" span="24" :style="{textAlign:'center',padding:'5px 0'}">
-                    <span @click="linkChange" :style="{fontWeight:'300'}"><router-link :to="item.link">{{item.text}}</router-link></span>
+                    <span @click="linkChange" :style="{fontWeight:'300'}">
+                        <!-- <van-icon name="home-o" /> -->
+                        <router-link :to="item.link">{{item.text}}</router-link>
+                    </span>
                 </van-col>
             </van-row>
         </van-popup>
@@ -76,7 +84,6 @@ export default class Menu extends Vue {
     private menuShow:boolean;
     private loginShow:boolean;
     private userInfoShow:boolean;
-    private loginText:string;
     private menuList:object[];
     private password: string;
     private user:creatObj;
@@ -105,7 +112,6 @@ export default class Menu extends Vue {
         }else{
             interfaces.getUserInfo({id:'00001'},function(json:any){
                     Toast.success('登录成功!');
-                    that.loginText = json.data.name.cname  
                     localStorage.setItem('userInfo',JSON.stringify(json.data.name))   
                     that.$store.state.userInfo = json.data.name;
                     done()
@@ -116,7 +122,6 @@ export default class Menu extends Vue {
     private escLogin(action:any,done:any): void{
             if(action === 'confirm'){
                 Toast('会员登出!');
-                this.loginText = '登录' 
                 localStorage.removeItem('userInfo')
                 this.$store.state.userInfo = {};
             }
@@ -129,11 +134,6 @@ export default class Menu extends Vue {
 
     public created(): void{    
         // 初始化登陆信息
-        if(!this.$store.state.userInfo.cname){
-            this.loginText = '登录'
-        }else{
-            this.loginText = this.$store.state.userInfo.cname
-        }
         //初始化菜单信息
         let mObj1:creatObj;
         mObj1 = Object.create(null);

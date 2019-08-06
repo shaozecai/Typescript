@@ -1,5 +1,5 @@
 <template>
   <div class="about">
-    Login
+    登陆页
   </div>
 </template>

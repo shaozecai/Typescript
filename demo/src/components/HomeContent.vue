@@ -5,25 +5,95 @@
         <!-- 实现下拉刷新 下拉加载 -->
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
           <van-list v-model="newActicle.loading" :finished="newActicle.finished" finished-text="没有更多了" @load="newOnLoad">
-            <van-cell v-for="item in newActicle.list" :key="item">
-              <van-skeleton title avatar :row="3" :loading="true" animate>
-                <div>实际内容</div>
+            <van-cell v-for="item in newActicle.list" :key="item.id">
+              <van-skeleton title avatar :row="3" :loading="item.loading" animate>
+                <van-row>
+                  <van-col span="24">
+                    <img :src="item.image" alt="" width="100%">
+                  </van-col>
+                  <van-col span="4">
+                    标题：
+                  </van-col>
+                  <van-col span="20">
+                    <h3 :style="{fontSize:'14px',margin:'0'}">{{item.title}}</h3>
+                  </van-col>
+                  <van-col span="6">
+                    推荐指数:
+                  </van-col>
+                  <van-col span="18">
+                    {{item.star}}
+                  </van-col>
+                  <van-col span="4">
+                    作者：
+                  </van-col>
+                  <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
+                    {{item.author}}
+                  </van-col>
+                  <van-col span="4">
+                    时间：
+                  </van-col>
+                  <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
+                    {{item.datetime}}
+                  </van-col>
+                  <van-col span="4">
+                    描述:
+                  </van-col>
+                  <van-col span="20" :style="{color:'#999',fontSize:'12px'}">
+                    {{item.desc}}
+                  </van-col>
+                </van-row>
+                
               </van-skeleton>
             </van-cell>
           </van-list>
         </van-pull-refresh>
-
-        
       </van-tab>
 
       <van-tab title="热度最高">
-        <van-list v-model="hotActicle.loading" :finished="hotActicle.finished" finished-text="没有更多了" @load="hotOnLoad">
-          <van-cell v-for="item in hotActicle.list" :key="item">
-            <van-skeleton title avatar :row="3" :loading="true" animate>
-              <div>实际内容</div>
-            </van-skeleton>
-          </van-cell>
-        </van-list>
+        <van-pull-refresh v-model="isLoading" @refresh="hotOnRefresh">
+          <van-list v-model="hotActicle.loading" :finished="hotActicle.finished" finished-text="没有更多了" @load="hotOnLoad">
+            <van-cell v-for="item in hotActicle.list" :key="item.id">
+              <van-skeleton title avatar :row="3" :loading="item.loading" animate>
+                  <van-row>
+                    <van-col span="24">
+                      <img :src="item.image" alt="" width="100%">
+                    </van-col>
+                    <van-col span="4">
+                      标题：
+                    </van-col>
+                    <van-col span="20">
+                      <h3 :style="{fontSize:'14px',margin:'0'}">{{item.title}}</h3>
+                    </van-col>
+                    <van-col span="6">
+                      推荐指数:
+                    </van-col>
+                    <van-col span="18">
+                      {{item.star}}
+                    </van-col>
+                    <van-col span="4">
+                      作者：
+                    </van-col>
+                    <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
+                      {{item.author}}
+                    </van-col>
+                    <van-col span="4">
+                      时间：
+                    </van-col>
+                    <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
+                      {{item.datetime}}
+                    </van-col>
+                    <van-col span="4">
+                      描述:
+                    </van-col>
+                    <van-col span="20" :style="{color:'#999',fontSize:'12px'}">
+                      {{item.desc}}
+                    </van-col>
+                  </van-row>
+                  
+                </van-skeleton>
+            </van-cell>
+          </van-list>
+        </van-pull-refresh>
       </van-tab>
     </van-tabs>
   </div>
@@ -70,45 +140,52 @@ export default class HomeContent extends Vue {
     // method
     public newOnLoad():void {     
       let activesList = this.newActicle
-      // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          activesList.list.push(activesList.list.length + 1);
+      interfaces.getList({id:'0001'},function(json:any){
+        if(activesList.list.length === 0){
+          activesList.list = [...json.data.data.projects]
+        }else{
+          activesList.list = activesList.list.concat(json.data.data.projects);
         }
-        // 加载状态结束
-        activesList.loading = false;
-
-        // 数据全部加载完成
-        if (activesList.list.length >= 40) {
+        activesList.loading = false;        
+        if(json.data.data.projects.length === 0){
           activesList.finished = true;
         }
-      }, 500);
+      })
     }
-    public hotOnLoad():void {     
+    public hotOnLoad():void {
       let activesList = this.hotActicle
-      // 异步更新数据
-      setTimeout(() => {
-        // 获取一次数据
-        for (let i = 0; i < 10; i++) {
-          activesList.list.push(activesList.list.length + 1);
+      interfaces.getList({id:'0001'},function(json:any){
+        if(activesList.list.length === 0){
+          activesList.list = [...json.data.data.projects]
+        }else{
+          activesList.list = activesList.list.concat(json.data.data.projects);
         }
-        // 加载状态结束
-        activesList.loading = false;
-
-        // 数据全部加载完成
-        if (activesList.list.length >= 40) {
+        activesList.loading = false;        
+        if(json.data.data.projects.length === 0){
           activesList.finished = true;
         }
-      }, 500);
+      })
     }
     public onRefresh() {
-      setTimeout(() => {
-        this.$toast('刷新成功');
-        this.isLoading = false;
-        this.count++;
-      }, 500);
+      const _this = this;
+      let activesList = this.newActicle
+      interfaces.getList({id:'0001'},function(json:any){
+        activesList.list = [...json.data.data.projects]
+        activesList.loading = false;  
+        _this.$toast('刷新成功');
+        _this.isLoading = false; 
+      })
     }
-
+    public hotOnRefresh(): void{
+      const _this = this;
+      let activesList = this.hotActicle
+      interfaces.getList({id:'0001'},function(json:any){
+        activesList.list = [...json.data.data.projects]
+        activesList.loading = false;  
+        _this.$toast('刷新成功');
+        _this.isLoading = false; 
+      })
+    }
     public changeMessage(): void {
      
     }

@@ -28,7 +28,10 @@ export default class APP extends Vue {
       console.log(this.$store,'未登录跳转登录页。。。');
       // this.$router.push({name: 'login', params: {id: '001'}})
     }else{
-      this.$store.state.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const userInfo = localStorage.getItem('userInfo');
+      if(typeof userInfo === 'string'){
+        this.$store.state.userInfo = JSON.parse(userInfo);
+      }
     }
     
   }

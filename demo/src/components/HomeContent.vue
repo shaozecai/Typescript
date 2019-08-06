@@ -2,14 +2,20 @@
   <div :style="{padding:'15px 5px'}">
     <van-tabs v-model="active">
       <van-tab title="最新发布">
-        <van-list v-model="newActicle.loading" :finished="newActicle.finished" finished-text="没有更多了" @load="newOnLoad">
-          <van-cell v-for="item in newActicle.list" :key="item">
-            <van-skeleton title avatar :row="3" :loading="true" animate>
-              <div>实际内容</div>
-            </van-skeleton>
-          </van-cell>
-        </van-list>
+        <!-- 实现下拉刷新 下拉加载 -->
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+          <van-list v-model="newActicle.loading" :finished="newActicle.finished" finished-text="没有更多了" @load="newOnLoad">
+            <van-cell v-for="item in newActicle.list" :key="item">
+              <van-skeleton title avatar :row="3" :loading="true" animate>
+                <div>实际内容</div>
+              </van-skeleton>
+            </van-cell>
+          </van-list>
+        </van-pull-refresh>
+
+        
       </van-tab>
+
       <van-tab title="热度最高">
         <van-list v-model="hotActicle.loading" :finished="hotActicle.finished" finished-text="没有更多了" @load="hotOnLoad">
           <van-cell v-for="item in hotActicle.list" :key="item">
@@ -54,6 +60,8 @@ export default class HomeContent extends Vue {
     
     
     active:number = 0;
+    isLoading:boolean = false;
+    count:number = 0;
     // 计算属性
 	  // private get reversedMessage(): string {      
       
@@ -91,6 +99,13 @@ export default class HomeContent extends Vue {
         if (activesList.list.length >= 40) {
           activesList.finished = true;
         }
+      }, 500);
+    }
+    public onRefresh() {
+      setTimeout(() => {
+        this.$toast('刷新成功');
+        this.isLoading = false;
+        this.count++;
       }, 500);
     }
 

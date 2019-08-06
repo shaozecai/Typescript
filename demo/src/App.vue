@@ -19,7 +19,19 @@ import Menu from '@/components/Menu.vue'; // @ is an alias to /src
 })
 
 export default class APP extends Vue {
+  
 
+
+  public created():void {
+    // 判断登录
+    if(localStorage.getItem('userInfo') == null){
+      console.log(this.$store,'未登录跳转登录页。。。');
+      // this.$router.push({name: 'login', params: {id: '001'}})
+    }else{
+      this.$store.state.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    }
+    
+  }
 
 }
 </script>

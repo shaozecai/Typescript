@@ -1,50 +1,43 @@
 <template>
-    <div class="menu-box" :style="{textAlign:'center',background:'#767676',padding:'10px'}">
+    <div class="menu-box" :style="{textAlign:'center',background:'#07b3b1',padding:'10px'}">
         <van-row>
-            <van-col span="6" :style="{textAlign:'left'}">
-                <van-button type="default" size="small" @click="menuShow = !menuShow">
-                    菜单
-                </van-button>
+            <van-col span="12" :style="{textAlign:'left'}">
+                <van-col span="6">
+                    <span @click="menuShow = !menuShow" :style="{display:'block',width:'32px',height:'32px',borderRadius:'50%',background:'#fff',overflow:'hidden',padding:'5px'}"><img src="../assets/logo.png" alt="" width="100%"></span>
+                </van-col>
+                <van-col span="18" :style="{lineHeight:'2.4',color:'#ffffff',padding:'0 12px'}">
+                    <h1 :style="{fontSize:'18px',color:'#ffffff',margin:'0',letterSpacing:'3px'}">爱宠笔记</h1>
+                </van-col>
             </van-col>
-            <van-col span="6" offset="12" :style="{textAlign:'right',fontSize:'14px',lineHeight:'30px',color:'#fff',display:'flex',justifyContent:'flex-end'}">
-                <span @click="loginShowFun" v-if="$store.state.userInfo.cname" :style="{width:'30px',height:'30px',borderRadius:'50%',background:'#fff',overflow:'hidden',border:'2px solid #fff',boxSize:'border-box'}">
-                    <img src="../assets/person_head_icon.png" alt="" width="100%">
-                </span>
-                <span @click="loginShowFun" v-if="!$store.state.userInfo.cname">
-                    登陆
-                </span>
+            <van-col span="12" :style="{textAlign:'right',fontSize:'14px',lineHeight:'30px',color:'#fff',display:'flex',justifyContent:'flex-end'}">
+               <van-icon @click="openSearch" name="search" :style="{fontSize:'26px',lineHeight:'1.6',color:'#ffffff',paddingLeft:'10px'}"/>
+               <van-icon @click="openMore" name="more-o" :style="{fontSize:'24px',lineHeight:'1.7',color:'#ffffff',paddingLeft:'10px'}"/>
+               <!-- 搜索弹出 -->
+               <van-popup v-model="searchShow" position="top" :style="{ height: '12%' }">
+                    <van-search v-model="searchValue" placeholder="请输入搜索关键词" show-action shape="round" @search="onSearch">
+                        <div slot="action" @click="onSearch">搜索</div>
+                    </van-search>
+               </van-popup>
+               <!-- 更多弹出 -->
+               <van-popup v-model="moreShow" position="top" :style="{ height: '12%' }">
+                   <van-grid :border="false" :column-num="4">
+                        <van-grid-item>
+                            <van-icon name="wechat" :style="{color:'#07b3b1',fontSize:'30px'}"/>
+                        </van-grid-item>
+                        <van-grid-item>
+                            <van-icon name="alipay" :style="{color:'#07b3b1',fontSize:'30px'}"/>
+                        </van-grid-item>
+                        <van-grid-item>
+                            <van-icon name="scan" :style="{color:'#07b3b1',fontSize:'30px'}"/>
+                        </van-grid-item>
+                        <van-grid-item>
+                            <van-icon name="shopping-cart-o" :style="{color:'#07b3b1',fontSize:'30px'}"/>
+                        </van-grid-item>
+                    </van-grid>
+               </van-popup>            
             </van-col>
         </van-row>
-        
-        <!-- login -->
-        <van-dialog v-model="loginShow" title="会员登录"  show-cancel-button confirm-button-text="登录" :beforeClose="loginConfirm" :style="{textAlign:'left'}">
-            <van-cell-group>
-                <van-field
-                    v-model="user.name"
-                    required
-                    clearable
-                    label="用户名"
-                    label-width="60px"
-                    placeholder="请输入用户名"
-                />
-                <van-field
-                    v-model="password"
-                    type="password"
-                    label="密码"
-                    label-width="60px"
-                    placeholder="请输入密码"
-                    required
-                />
-                </van-cell-group>
-        </van-dialog>
-        <van-dialog v-model="userInfoShow" title="会员信息" show-cancel-button confirm-button-text="退出" :beforeClose="escLogin" :style="{textAlign:'left'}">
-            <van-cell-group>
-                <van-field  :value="$store.state.userInfo.cname"  label="用户名" left-icon="contact" disabled />
-                <van-field  :value="$store.state.userInfo.first"  label="first" left-icon="contact" disabled />
-                <van-field  :value="$store.state.userInfo.last"  label="last" left-icon="contact" disabled />
-                <van-field  :value="$store.state.userInfo.name"  label="name" left-icon="contact" disabled />
-            </van-cell-group>
-        </van-dialog>
+
         <!-- menu -->
         <van-popup v-model="menuShow" position="left" :style="{ width: '80%',height:'100%',maxWidth:'400px' }">
             <van-row>
@@ -84,18 +77,24 @@ export default class Menu extends Vue {
     private menuShow:boolean;
     private loginShow:boolean;
     private userInfoShow:boolean;
+    private moreShow:boolean;
+    private searchShow:boolean;
     private menuList:object[];
     private password: string;
     private user:creatObj;
+    private searchValue:string;
     constructor() {
         super();
         this.menuShow = false;
         this.loginShow = false;
-        this.userInfoShow = false; 
+        this.userInfoShow = false;
+        this.moreShow = false;
+        this.searchShow = false;
         this.menuList = []       
         this.password = ''
         this.user = Object.create(null);
         this.user.name = ''
+        this.searchValue = '';
 
     }
     private loginShowFun(): void{      
@@ -118,20 +117,24 @@ export default class Menu extends Vue {
                 })           
         }
     }
-    //退出登录
-    private escLogin(action:any,done:any): void{
-            if(action === 'confirm'){
-                Toast('会员登出!');
-                localStorage.removeItem('userInfo')
-                this.$store.state.userInfo = {};
-            }
-            done();
-    }
+    
     //切换路由
     private linkChange(): void{
         this.menuShow = !this.menuShow
     }
-
+    //打开搜索
+    private openSearch(): void{
+        this.searchShow = true
+    }
+    //搜索
+    private onSearch(): void{
+        Toast('搜索：' + this.searchValue);
+    }
+    // 打开more
+    private openMore(): void{
+        this.moreShow = true
+    }
+    
     public created(): void{    
         // 初始化登陆信息
         //初始化菜单信息
@@ -147,8 +150,8 @@ export default class Menu extends Vue {
         mObj2.value = "002";
         let mObj3:creatObj;
         mObj3 = Object.create(null);
-        mObj3.text = "登陆";
-        mObj3.link = "/login";
+        mObj3.text = "我的";
+        mObj3.link = "/person";
         mObj3.value = "003";
         this.menuList = [mObj1,mObj2,mObj3]
 

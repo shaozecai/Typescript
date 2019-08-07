@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <div id="nav">
-      <Menu></Menu>      
+      <Menu v-if="$store.state.userInfo.cname"></Menu>      
     </div>
     <router-view/>
     <div id="footer">
-      <FooterBar></FooterBar> 
+      <FooterBar v-if="$store.state.userInfo.cname"></FooterBar> 
     </div>
   </div>
 </template>
@@ -29,11 +29,13 @@ export default class APP extends Vue {
     // 判断登录
     if(localStorage.getItem('userInfo') == null){
       console.log(this.$store,'未登录跳转登录页。。。');
-      // this.$router.push({name: 'login', params: {id: '001'}})
+      this.$router.push({name: 'login'})
     }else{
-      const userInfo = localStorage.getItem('userInfo');
-      if(typeof userInfo === 'string'){
-        this.$store.state.userInfo = JSON.parse(userInfo);
+      if(!this.$store.state.userInfo.id){
+        const userInfo = localStorage.getItem('userInfo');
+        if(typeof userInfo === 'string'){
+          this.$store.state.userInfo = JSON.parse(userInfo);
+        }
       }
     }
     

@@ -9,10 +9,24 @@ let httpError = function(err:object) {
 interface createApi{
     getUserInfo?:any,
     getList?:any,
-    getDetail?:any
+    getDetail?:any,
+    login?:any
 }
 let interfaces:createApi = Object.create(null);
-
+//登陆接口
+interfaces.login = function(payload:object,callback:any){
+    let params:object = {
+        ...{},
+        ...payload
+    }
+    dnwe.post('/login',params).then((res:object):object => {
+        return res
+    }).then((json:object):any =>{
+        callback(json)
+    }).catch((e:object):void => {
+        httpError(e)
+    })
+}
 // 获取用户信息接口
 interfaces.getUserInfo = function(payload:object,callback:any){
     let params:object = {

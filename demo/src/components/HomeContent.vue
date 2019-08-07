@@ -1,62 +1,16 @@
 <template>
   <div :style="{padding:'15px 5px'}">
-    <van-tabs v-model="active">
-      <van-tab title="最新发布">
-        <!-- 实现下拉刷新 下拉加载 -->
-        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-          <van-list v-model="newActicle.loading" :finished="newActicle.finished" finished-text="没有更多了" @load="newOnLoad">
-            <van-cell v-for="item in newActicle.list" :key="item.id">
-              <van-skeleton title avatar :row="3" :loading="item.loading" animate>
-                <van-row>
-                  <van-col span="24">
-                    <img @click="gotoDetail(item.id)" :src="item.image" alt="" width="100%">
-                  </van-col>
-                  <van-col span="4">
-                    标题：
-                  </van-col>
-                  <van-col span="20">
-                    <h3 @click="gotoDetail(item.id)" :style="{fontSize:'14px',margin:'0'}">{{item.title}}</h3>
-                  </van-col>
-                  <van-col span="6">
-                    推荐指数:
-                  </van-col>
-                  <van-col span="18">
-                    {{item.star}}
-                  </van-col>
-                  <van-col span="4">
-                    作者：
-                  </van-col>
-                  <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
-                    {{item.author}}
-                  </van-col>
-                  <van-col span="4">
-                    时间：
-                  </van-col>
-                  <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
-                    {{item.datetime}}
-                  </van-col>
-                  <van-col span="4">
-                    描述:
-                  </van-col>
-                  <van-col span="20" :style="{color:'#999',fontSize:'12px'}">
-                    {{item.desc}}
-                  </van-col>
-                </van-row>
-                
-              </van-skeleton>
-            </van-cell>
-          </van-list>
-        </van-pull-refresh>
-      </van-tab>
-
-      <van-tab title="热度最高">
+    <van-tabs v-model="active" color="#07b3b1" sticky swipeable>
+      <!-- 推荐 -->
+      <van-tab title="推荐">
         <van-pull-refresh v-model="isLoading" @refresh="hotOnRefresh">
           <van-list v-model="hotActicle.loading" :finished="hotActicle.finished" finished-text="没有更多了" @load="hotOnLoad">
             <van-cell v-for="item in hotActicle.list" :key="item.id">
               <van-skeleton title avatar :row="3" :loading="item.loading" animate>
                   <van-row>
                     <van-col span="24">
-                      <img :src="item.image" alt="" width="100%">
+                      <!-- <img :src="item.image" alt="" width="100%"> -->
+                      <img @click="gotoDetail(item.id)" src="../assets/img.jpg" alt="" width="100%">
                     </van-col>
                     <van-col span="4">
                       标题：
@@ -95,6 +49,103 @@
           </van-list>
         </van-pull-refresh>
       </van-tab>
+      <!-- 最新 -->
+      <van-tab title="最新">
+        <!-- 实现下拉刷新 下拉加载 -->
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+          <van-list v-model="newActicle.loading" :finished="newActicle.finished" finished-text="没有更多了" @load="newOnLoad">
+            <van-cell v-for="item in newActicle.list" :key="item.id">
+              <van-skeleton title avatar :row="3" :loading="item.loading" animate>
+                <van-row>
+                  <van-col span="24">
+                    <!-- <img @click="gotoDetail(item.id)" :src="item.image" alt="" width="100%"> -->
+                    <img @click="gotoDetail(item.id)" src="../assets/img.jpg" alt="" width="100%">
+                  </van-col>
+                  <van-col span="4">
+                    标题：
+                  </van-col>
+                  <van-col span="20">
+                    <h3 @click="gotoDetail(item.id)" :style="{fontSize:'14px',margin:'0'}">{{item.title}}</h3>
+                  </van-col>
+                  <van-col span="6">
+                    推荐指数:
+                  </van-col>
+                  <van-col span="18">
+                    {{item.star}}
+                  </van-col>
+                  <van-col span="4">
+                    作者：
+                  </van-col>
+                  <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
+                    {{item.author}}
+                  </van-col>
+                  <van-col span="4">
+                    时间：
+                  </van-col>
+                  <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
+                    {{item.datetime}}
+                  </van-col>
+                  <van-col span="4">
+                    描述:
+                  </van-col>
+                  <van-col span="20" :style="{color:'#999',fontSize:'12px'}">
+                    {{item.desc}}
+                  </van-col>
+                </van-row>
+                
+              </van-skeleton>
+            </van-cell>
+          </van-list>
+        </van-pull-refresh>
+      </van-tab>
+      <!-- 热门 -->
+      <van-tab title="热门">
+        <van-pull-refresh v-model="isLoading" @refresh="hotOnRefresh">
+          <van-list v-model="hotActicle.loading" :finished="hotActicle.finished" finished-text="没有更多了" @load="hotOnLoad">
+            <van-cell v-for="item in hotActicle.list" :key="item.id">
+              <van-skeleton title avatar :row="3" :loading="item.loading" animate>
+                  <van-row>
+                    <van-col span="24">
+                      <img @click="gotoDetail(item.id)" src="../assets/img.jpg" alt="" width="100%">
+                    </van-col>
+                    <van-col span="4">
+                      标题：
+                    </van-col>
+                    <van-col span="20">
+                      <h3 :style="{fontSize:'14px',margin:'0'}">{{item.title}}</h3>
+                    </van-col>
+                    <van-col span="6">
+                      推荐指数:
+                    </van-col>
+                    <van-col span="18">
+                      {{item.star}}
+                    </van-col>
+                    <van-col span="4">
+                      作者：
+                    </van-col>
+                    <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
+                      {{item.author}}
+                    </van-col>
+                    <van-col span="4">
+                      时间：
+                    </van-col>
+                    <van-col span="8" :style="{color:'#999',fontSize:'12px'}">
+                      {{item.datetime}}
+                    </van-col>
+                    <van-col span="4">
+                      描述:
+                    </van-col>
+                    <van-col span="20" :style="{color:'#999',fontSize:'12px'}">
+                      {{item.desc}}
+                    </van-col>
+                  </van-row>
+                  
+                </van-skeleton>
+            </van-cell>
+          </van-list>
+        </van-pull-refresh>
+      </van-tab>
+
     </van-tabs>
   </div>
 </template>

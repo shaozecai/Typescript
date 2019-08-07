@@ -1,9 +1,9 @@
 <template>
   <div class="footer">
-    <van-tabbar route v-model="active" active-color="#ffffff" inactive-color="#333" :style="{background:'#cccccc'}">
-        <van-tabbar-item name="home" icon="home-o" replace to="/"></van-tabbar-item>
-        <van-tabbar-item name="add" icon="plus" replace to="/detail" class="article-add"></van-tabbar-item>
-        <van-tabbar-item name="person" icon="manager" :dot="true" replace to="/login"></van-tabbar-item>
+    <van-tabbar route v-model="active" active-color="#F44336" inactive-color="#fff" :style="{background:'#07b3b1',fontSize:'20px'}">
+        <van-tabbar-item name="home" icon="friends" replace to="/"></van-tabbar-item>
+        <van-tabbar-item name="add" icon="plus" replace to="/add" class="article-add"></van-tabbar-item>
+        <van-tabbar-item name="person" icon="manager" :dot="presonDot" replace to="/person" @click="clearHot"></van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
@@ -13,7 +13,19 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class FooterBar extends Vue {
-    active:string = "home"
+    active:string = "home";
+    presonDot:boolean = false;
+
+    public created(){
+        if(this.$store.state.userInfo.msg){
+            this.presonDot = true
+        }else{
+            this.presonDot = false
+        }
+    }
+    public clearHot(): void{
+        this.presonDot = false
+    }
 }
 </script>
 

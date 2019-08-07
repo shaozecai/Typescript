@@ -26,5 +26,16 @@ export default new Router({
       name: 'detail',
       component: () => import('./views/Detail.vue'),
     },
+    {
+      path: '/person',
+      name: 'person',
+      component: () => import('./views/Person.vue'),
+    },
+    {
+      path: '/add',
+      name: 'add',
+      component: () => import('./views/AddArticle.vue'),
+    },
+    
   ],
 });

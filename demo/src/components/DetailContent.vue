@@ -41,7 +41,9 @@
         <van-row :style="{width:'100%',padding:'0 10px'}">
             <van-col span="18">
                 <van-tabbar-item name="comment" class="comment-box" :style="{width:'100%',padding:'8px 10px',boxSizing:'border-box'}">
-                    <input type="text" @focus="commentFocus" :style="{boxSizing:'border-box', width:'100%',color:'#fff',background:'rgba(221,221,221,0.65)',borderRadius:'24px',height:'24px',border:'none',padding:'0 10px'}">
+                    <form action="" method="post" @submit="commentSubmit">
+                        <input id="commentInput" v-model="commentText" type="text" @focus="commentFocus" @blur="commentBlur" :style="{boxSizing:'border-box', width:'100%',color:'#fff',background:'rgba(221,221,221,0.65)',borderRadius:'24px',height:'24px',border:'none',padding:'0 10px'}">
+                    </form>
                     <van-icon v-show="!commentOnFocus" name="edit" :style="{position:'absolute',left:'5px',fontSize:'16px',color:'#fff',top:'3px'}"/>
                 </van-tabbar-item>
             </van-col>
@@ -59,6 +61,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import interfaces from '../public/javascript/api'
+import { Toast } from 'vant';
 
 
 @Component
@@ -70,6 +73,7 @@ export default class HomeContent extends Vue {
     private chatIcon:string;
     private commentOnFocus:boolean;
     private comments:any;
+    private commentText:string;
     constructor() {
         super();
         this.article = {};
@@ -78,12 +82,31 @@ export default class HomeContent extends Vue {
         this.chatIcon = 'chat-o';
         this.commentOnFocus = false;
         this.comments = [];
+        this.commentText = '';
     }
     loading:boolean = true;
    
     // method
     private commentFocus(): void{
         this.commentOnFocus = true;
+    }
+    private commentBlur(): void{
+        if(this.commentText === ''){
+            this.commentOnFocus = false;
+        }
+    }
+    private commentSubmit(e:any): boolean{
+        e.preventDefault();
+        let obj:object = {
+            content: this.commentText
+        }
+        this.comments.unshift(obj)
+        Toast('评论成功!');
+        
+        document.getElementById('commentInput')!.blur();
+        this.commentText = '';
+        this.commentOnFocus = false;
+        return false;
     }
     private toggleLike(): void{
         if(this.likeIcon === 'like-o'){

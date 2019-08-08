@@ -1,14 +1,16 @@
 <template>
   <div class="login-page" :style="{background:'#07b3b1',minHeight:'100vh'}">
-    <div :style="{borderRadius:'50%',background:'#fff',overflow:'hidden',padding:'5px',position:'absolute',top:'10px',left:'10px',width:'50px',height:'50px'}">
-        <img src="../assets/logo.png" alt="" width="100%">
-    </div>
-    <van-cell-group label-align="left" :style="{position:'absolute',top:'50%',left:'0',width:'100%',transform:'translate(0,-50%)',border:'none',background:'#07b3b1'}">
-      <van-field v-model="username" label="用户名" label-width="60px" label-align="left" left-icon="contact" placeholder="请输入用户名" :error-message="usernameErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
-      <van-field v-model="phone" label="手机号" label-width="60px" label-align="left" left-icon="phone-o" placeholder="请输入手机号" :error-message="phoneErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
-      <van-field v-model="password" type="password" label-width="60px" label-align="left" label="密码" left-icon="clock-o" placeholder="请输入密码" :error-message="passwordErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
-      <van-button plain @click="loginFun" type="primary" :loading="loading" :style="{width:'80px',height:'40px',marginTop:'20px',color:'#333'}">登陆</van-button>
-    </van-cell-group>
+    <van-cell-group class="login-input" label-align="left" :style="{position:'absolute',top:'50%',left:'0',width:'100%',transform:'translate(0,-50%)',border:'none',background:'#07b3b1'}">
+      <div :style="{margin:'0 auto 20px',borderRadius:'50%',background:'#fff',overflow:'hidden',padding:'5px',width:'50px',height:'50px'}">
+          <img src="../assets/logo.png" alt="" width="100%">
+      </div>
+      <van-field v-model="username" label="" label-width="0" placeholder="用户名" :error-message="usernameErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
+      <van-field v-model="phone" label="" label-width="0" placeholder="手机" :error-message="phoneErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
+      <van-field v-model="password" type="password" label-width="0" label="" placeholder="密码" :error-message="passwordErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
+      <span :style="{padding:'0 15px',boxSizing:'border-box',display:'block'}">
+        <van-button plain round @click="loginFun" type="primary" :loading="loading" :style="{width:'100%',height:'36px',lineHeight:'36px',marginTop:'10px',color:'#333',background:'#fff51e'}">登陆</van-button>
+      </span>
+      </van-cell-group>
 
     <div class="copright" :style="{position:'absolute',bottom:'0',left:'0',width:'100%',fontSize:'12px',color:'#717171',padding:'5px 0'}">
       由shaozecai.com提供技术支持
@@ -95,9 +97,15 @@ export default class FooterBar extends Vue {
 </script>
 
 <style lang="scss">
-.van-field__control{
-  color:#fff;
-  
+.login-page {
+  input.van-field__control{
+    color:#07b3b1;
+    background: #fff;
+    border-radius: 4px;
+    padding: 5px 8px;
+    box-sizing: border-box;
+    font-size: 13px;
+  }
 }
 .login-page ::-webkit-input-placeholder {
   color: #888;

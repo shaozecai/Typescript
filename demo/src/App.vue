@@ -1,12 +1,8 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <Menu v-if="$store.state.userInfo.cname"></Menu>      
-    </div>
+    
     <router-view/>
-    <div id="footer">
-      <FooterBar v-if="$store.state.userInfo.cname"></FooterBar> 
-    </div>
+    
   </div>
 </template>
 
@@ -22,9 +18,6 @@ import FooterBar from '@/components/FooterBar.vue'; // @ is an alias to /src
 })
 
 export default class APP extends Vue {
-  
-
-
   public created():void {
     // 判断登录
     if(localStorage.getItem('userInfo') == null){
@@ -40,6 +33,7 @@ export default class APP extends Vue {
     }
     
   }
+  
 
 }
 </script>

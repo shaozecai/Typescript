@@ -10,7 +10,8 @@ interface createApi{
     getUserInfo?:any,
     getList?:any,
     getDetail?:any,
-    login?:any
+    login?:any,
+    comments?:any
 }
 let interfaces:createApi = Object.create(null);
 //登陆接口
@@ -69,7 +70,20 @@ interfaces.getDetail = function(payload:object,callback:any){
         httpError(e)
     })
 }
-
+//评论信息
+interfaces.comments = function(payload:object,callback:any){
+    let params:object = {
+        ...{},
+        ...payload
+    }
+    dnwe.post('/comments',params).then((res:object):object => {
+        return res
+    }).then((json:object):any =>{
+        callback(json)
+    }).catch((e:object):void => {
+        httpError(e)
+    })
+}
 
 
 export default interfaces

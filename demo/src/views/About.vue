@@ -5,7 +5,9 @@
     </div>
     <div class="about">
       <span :style="{padding:'15px',fontSize:'14px',display:'block',boxSizing:'border-box',color:'#07b3b1',textAlign:'left',lineHeight:'2'}">
-        爱宠笔记，在这里可以通过好玩有趣的视频分享，结识众多的时尚养宠达人，记录爱宠的快乐点滴，与达人们交流养宠经验，学习养宠知识。 
+        爱宠笔记，在这里可以通过好玩有趣的视频分享，结识众多的时尚养宠达人，记录爱宠的快乐点滴，与达人们交流养宠经验，学习养宠知识。
+        <br>
+        技术方案：<br>Vue2.6 + Vuex3.0 + Typescript3.4 + Vant2.1 + Easy-mock
       </span>
     </div>
     <div id="footer">

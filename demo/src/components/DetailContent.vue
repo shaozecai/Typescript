@@ -3,7 +3,7 @@
     <van-sticky>
         <van-nav-bar title="文章详情" left-text="返回" left-arrow @click-left="onClickLeft"/>
     </van-sticky>
-    <van-skeleton title :row="10" :loading="loading">
+    <van-skeleton title :row="10" :loading="loading" :style="{paddingTop:'20px'}">
         <van-row :style="{padding:'0 0 50px 0'}">
             <van-col span="24">
                 <h3>{{article.title}}</h3>

@@ -13,13 +13,13 @@
                <van-icon @click="openSearch" name="search" :style="{fontSize:'26px',lineHeight:'1.6',color:'#ffffff',paddingLeft:'10px'}"/>
                <van-icon @click="openMore" name="more-o" :style="{fontSize:'24px',lineHeight:'1.7',color:'#ffffff',paddingLeft:'10px'}"/>
                <!-- 搜索弹出 -->
-               <van-popup v-model="searchShow" position="top" :style="{ height: '12%',paddingTop:'10px'}">
+               <van-popup v-model="searchShow" position="top" :style="{padding:'20px 10px',boxSizing:'border-box'}">
                     <van-search v-model="searchValue" placeholder="请输入搜索关键词" show-action shape="round" @search="onSearch">
                         <div slot="action" @click="onSearch">搜索</div>
                     </van-search>
                </van-popup>
                <!-- 更多弹出 -->
-               <van-popup v-model="moreShow" position="top" :style="{ height: '12%',paddingTop:'10px'}">
+               <van-popup v-model="moreShow" position="top" :style="{padding:'20px 10px',boxSizing:'border-box'}">
                    <van-grid :border="false" :column-num="4">
                         <van-grid-item>
                             <van-icon name="wechat" :style="{color:'#07b3b1',fontSize:'30px'}"/>

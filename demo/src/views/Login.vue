@@ -5,7 +5,7 @@
           <img src="../assets/logo.png" alt="" width="100%">
       </div>
       <van-field v-model="username" label="" label-width="0" placeholder="用户名" :error-message="usernameErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
-      <van-field v-model="phone" label="" label-width="0" placeholder="手机" :error-message="phoneErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
+      <van-field v-model="phone" readonly clickable @touchstart.native.stop="keyboardShow = true" label="" label-width="0" placeholder="手机" :error-message="phoneErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
       <van-field v-model="password" type="password" label-width="0" label="" placeholder="密码" :error-message="passwordErrMsg" :style="{background:'#07b3b1',color:'#fff',border:'none'}"/>
       <span :style="{padding:'0 15px',boxSizing:'border-box',display:'block'}">
         <van-button plain round @click="loginFun" type="primary" :loading="loading" :style="{width:'100%',height:'36px',lineHeight:'36px',marginTop:'10px',color:'#333',background:'#fff51e'}">登陆</van-button>
@@ -15,6 +15,15 @@
     <div class="copright" :style="{position:'absolute',bottom:'0',left:'0',width:'100%',fontSize:'12px',color:'#717171',padding:'5px 0'}">
       由shaozecai.com提供技术支持
     </div>
+    <van-number-keyboard
+      v-model="phone"
+      :show="keyboardShow"
+      theme="custom"
+      extra-key="."
+      :maxlength="11"
+      close-button-text="完成"
+      @blur="keyboardShow = false"
+    />
   </div>
 </template>
 
@@ -32,8 +41,10 @@ export default class FooterBar extends Vue {
     phoneErrMsg:string = ""
     password:string = ""
     passwordErrMsg:string = ""
-    
+    keyboardShow:boolean = false;
+    showKeyboard:boolean = false;
     loading:boolean = false;
+    
 
     private loginFun(): void{
       const that = this;
@@ -65,7 +76,7 @@ export default class FooterBar extends Vue {
           this.passwordErrMsg = '请输入密码'
           validataFlag = false
       }else{
-        if(this.password.length > 10 || this.password.length < 6){
+        if(this.password.length < 6 || this.password.length > 10){
           this.passwordErrMsg = '密码长度6-10个字符!'
           validataFlag = false
         }else{
@@ -75,6 +86,7 @@ export default class FooterBar extends Vue {
       // 验证通过
       if(validataFlag){
         interfaces.login({id:'0001'},function(json:any){
+          debugger
             Toast.success('登录成功!');
             localStorage.setItem('userInfo',JSON.stringify(json.data.data))   
             that.$store.state.userInfo = json.data.data;
